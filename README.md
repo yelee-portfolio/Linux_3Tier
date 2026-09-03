@@ -66,17 +66,6 @@ DB 백업 스크립트 : scripts/db-backup.sh
 
 
 
-
-## 트러블슈팅
-
-문제:WAS01 내부 접속은 되지만, WEB01에서는 8080 접속이 실패함
-
-원인: Flask가 127.0.0.1:8080으로만 LISTEN함
-
-해결: Bind Address를 0.0.0.0으로 변경 후 서비스 재시작함
-
-
-
 ## 결론
 
 Windows Browser에서 WEB01에 접속, DB에 저장된 상품 데이터가 화면에 출력되었습니다.
