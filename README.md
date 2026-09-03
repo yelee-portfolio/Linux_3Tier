@@ -58,7 +58,9 @@ DB 백업 스크립트 : scripts/db-backup.sh
 
 \- Flask 애플리케이션을 systemd 서비스로 등록해 자동 실행되도록 구성
 
-\- WAS 전용 appuser 계정으로 원격 접속 및 데이터 조회하도록 구성
+\- Flask 애플리케이션은 root가 아닌 Linux appuser 계정으로 실행
+
+\- MariaDB에는 WAS01에서만 접근 가능한 별도 DB 사용자 appuser 계정을 생성하고 필요한 권한만 부여
 
 \- 서버 역할에 필요한 통신만 허용하도록 firewalld를 구성
 
