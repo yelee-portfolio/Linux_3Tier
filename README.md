@@ -44,6 +44,14 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 
 
+## 관련설정 경로
+
+Nginx 설정 : config/nginx/was.conf
+systemd 설정 : config/systemd/inventory.service
+DB 백업 스크립트 : scripts/db-backup.sh
+
+
+
 ## 설계 포인트
 
 \- Flask 애플리케이션을 systemd 서비스로 등록해 자동 실행되도록 구성
@@ -54,6 +62,14 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 \- mariadb-dump와 Bash 스크립트로 DB 백업 자동화+cron으로 매일 실행+7일 이상 지난 백업은 자동 삭제되도록 구성
 
+
+
+
+## 트러블슈팅
+
+문제:WAS01 내부 접속은 되지만, WEB01에서는 8080 접속이 실패함
+원인: Flask가 127.0.0.1:8080으로만 LISTEN함
+해결: Bind Address를 0.0.0.0으로 변경 후 서비스 재시작함
 
 
 ## 결론
