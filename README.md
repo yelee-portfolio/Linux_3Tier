@@ -41,7 +41,7 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 
 
-## 1-2. 설계 포인트
+### 설계 포인트
 
 \- Flask 애플리케이션을 systemd 서비스로 등록해 자동 실행되도록 구성
 
@@ -56,7 +56,7 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 
 
-## 1-3. 관련설정 경로
+### 관련설정 경로
 
 Nginx 설정 : config/nginx/was.conf
 
@@ -70,19 +70,24 @@ DB 백업 스크립트 : scripts/db-backup.sh
 
 **- WEB01 (10.0.1.10/Public Subnet)**
 
-WEB 서버는 Public 접근 허용
+WEB 서버는 Public 접근을 허용하고,
+HTTP 80 요청을 받아 WAS01의 8080 포트로 전달하도록 구성함
 
 **- WAS01 (10.0.2.20/Private Subnet)**
 
-WAS 서버는 Public IP 없이 Private Subnet에 배치함
+WAS 서버는 Public IP 없이 Private Subnet에 배치하고,
+WEB01에서 전달된 요청을 처리한 뒤 DB01의 3306 포트로 MariaDB에 접속하도록 구성함
 
 **- DB01 (10.0.3.30/Private Subnet)**
 
-WAS 서버는 Public IP 없이 Private Subnet에 배치함
+DB 서버는 Public IP 없이 Private Subnet에 배치하고,
+WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
+
+또한 WAS, DB서버의 관리용 SSH 접속은 WEB01을 경유하도록 구성함
 
 
 
-## 2-2. 네트워크
+### 네트워크
 
 - VPC : 10.0.0.0/16
   
@@ -94,17 +99,17 @@ WAS 서버는 Public IP 없이 Private Subnet에 배치함
 
 
 
-## 2-3. 트러블 슈팅
+### 트러블 슈팅
 
 ## 문제1: Private DB 패키지 설치 실패
 
 원인: Private Subnet에 인터넷 경로가 없어 dnf timeout이 발생함
 
-해결: 추가 패키지 설치 없이 systemd timer를 이용해 백업 자동화함
+해결: 별도 패키지 설치가 필요 없는 systemd timer를 이용해 DB 백업 자동화를 구성함
 
 
 
-## 문제2: MariaDB Dump 권한 오류
+## 문제2: MariaDB Dump 인증 오류
 
 원인: ec2-user로 dump 실행 시 DB 인증이 실패함
 
@@ -116,8 +121,8 @@ WAS 서버는 Public IP 없이 Private Subnet에 배치함
 
 VMware 환경에서 WEB → WAS → DB 통신 구성을 완료했습니다.
 
-또한 이를 동일하게 AWS로 이전도 완료했습니다.
+이후 동일한 3-Tier 구조를 AWS로 옮기고, WEB은 Public Subnet, WAS / DB는 Private Subnet으로 분리했습니다.
 
-또한 서비스가 자동 기동되게 했으며, DB 백업도 자동화 하였습니다.
+각 서비스는 systemd로 자동 기동하도록 구성 하였으며, DB 백업도 자동화했습니다.
 
-마지막으로 재부팅 후 전체 서비스가 정상인지 복구하여, 확인 완료되었습니다.
+마지막으로 전체 서비스가 정상적으로 동작하는지 재부팅하여 확인했습니다.
