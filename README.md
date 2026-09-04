@@ -101,7 +101,7 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 ### 트러블 슈팅
 
-## 문제1: Private DB 패키지 설치 실패
+**문제1: Private DB 패키지 설치 실패**
 
 원인: Private Subnet에 인터넷 경로가 없어 dnf timeout이 발생함
 
@@ -109,7 +109,7 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 
 
-## 문제2: MariaDB Dump 인증 오류
+**문제2: MariaDB Dump 인증 오류**
 
 원인: ec2-user로 dump 실행 시 DB 인증이 실패함
 
