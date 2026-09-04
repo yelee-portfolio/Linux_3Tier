@@ -4,15 +4,12 @@
 
 ## 목표
 
-VMware환경에서 리눅스 서버 3대를 WEB /WAS / DB 서버를 분리하여,
-
-서비스 통신을 직접 구성했습니다.
-
-WEB → WAS → DB 요청 흐름을 직접 구성하고 확인하는 것을 목표로 진행했습니다.
+Linux 기반의 WEB / WAS / DB 3-Tier 환경을 VMware환경에서 구성하고,
+이 구조를 AWS에서도 구성하였습니다.
 
 
 
-## 서버 역할
+## 1. VMware 구축
 
 **- WEB01 (192.168.10.10)**
 
@@ -44,17 +41,7 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 
 
-## 관련설정 경로
-
-Nginx 설정 : config/nginx/was.conf
-
-systemd 설정 : config/systemd/inventory.service
-
-DB 백업 스크립트 : scripts/db-backup.sh
-
-
-
-## 설계 포인트
+## 1-2. 설계 포인트
 
 \- Flask 애플리케이션을 systemd 서비스로 등록해 자동 실행되도록 구성
 
@@ -68,9 +55,69 @@ DB 백업 스크립트 : scripts/db-backup.sh
 
 
 
+
+## 1-3. 관련설정 경로
+
+Nginx 설정 : config/nginx/was.conf
+
+systemd 설정 : config/systemd/inventory.service
+
+DB 백업 스크립트 : scripts/db-backup.sh
+
+
+
+## 2. AWS 구축
+
+**- WEB01 (10.0.1.10/Public Subnet)**
+
+WEB 서버는 Public 접근 허용
+
+**- WAS01 (10.0.2.20/Private Subnet)**
+
+WAS 서버는 Public IP 없이 Private Subnet에 배치함
+
+**- DB01 (10.0.3.30/Private Subnet)**
+
+WAS 서버는 Public IP 없이 Private Subnet에 배치함
+
+
+
+## 2-2. 네트워크
+
+- VPC : 10.0.0.0/16
+  
+- Public Subnet : 10.0.1.0/24
+  
+- WAS Private Subnet : 10.0.2.0/24
+  
+- DB Private Subnet : 10.0.3.0/24
+
+
+
+## 2-3. 트러블 슈팅
+
+## 문제1: Private DB 패키지 설치 실패
+
+원인: Private Subnet에 인터넷 경로가 없어 dnf timeout이 발생함
+
+해결: 추가 패키지 설치 없이 systemd timer를 이용해 백업 자동화함
+
+
+
+## 문제2: MariaDB Dump 권한 오류
+
+원인: ec2-user로 dump 실행 시 DB 인증이 실패함
+
+해결: root 권한으로 백업 작업을 수행하도록 변경함
+
+
+
 ## 결론
 
-Windows Browser에서 WEB01에 접속, DB에 저장된 상품 데이터가 화면에 출력되었습니다.
+VMware 환경에서 WEB → WAS → DB 통신 구성을 완료했습니다.
 
-즉 최종적으로 WEB → WAS → DB 전체 요청 흐름이 정상적으로 동작하는 것을 확인했습니다.
+또한 이를 동일하게 AWS로 이전도 완료했습니다.
 
+또한 서비스가 자동 기동되게 했으며, DB 백업도 자동화 하였습니다.
+
+마지막으로 재부팅 후 전체 서비스가 정상인지 복구하여, 확인 완료되었습니다.
