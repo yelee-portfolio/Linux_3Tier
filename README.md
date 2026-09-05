@@ -14,7 +14,7 @@ Linux 기반의 WEB / WAS / DB 3-Tier 환경을 VMware환경에서 구성하고,
 
 ## 1. VMware 구축
 
-**- WEB01 (192.168.10.10)**
+- WEB01 (192.168.10.10)
 
 사용자가 처음 접속하는 서버로,
 
@@ -24,8 +24,7 @@ WEB01 주소 접속 시 WAS01에서 조회한 Inventory 화면이 출력되는 �
 
 
 
-
-**- WAS01 (192.168.10.20)**
+- WAS01 (192.168.10.20)
 
 실제 애플리케이션이 실행되는 서버로,
 
@@ -34,7 +33,7 @@ Flask 애플리케이션을 8080 포트에서 실행하고 DB01 MariaDB 접속�
 애플리케이션은 root가 아닌 appuser 계정으로 실행하도록 구성함
 
 
-**- DB01 (192.168.10.30)**
+- DB01 (192.168.10.30)
 
 Inventory 데이터가 저장되는 데이터베이스 서버로,
 
@@ -46,17 +45,17 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 ### 설계 포인트
 
-\- Flask 애플리케이션을 systemd 서비스로 등록해 자동 실행되도록 구성
+- Flask 애플리케이션을 systemd 서비스로 등록해 자동 실행되도록 구성
 
-\- Flask 애플리케이션은 root가 아닌 Linux appuser 계정으로 실행
+- Flask 애플리케이션은 root가 아닌 Linux appuser 계정으로 실행
 
-\- MariaDB에는 WAS01에서만 접근 가능한 별도 DB 사용자 appuser 계정을 생성하고 필요한 권한만 부여
+- MariaDB에는 WAS01에서만 접근 가능한 별도 DB 사용자 appuser 계정을 생성하고 필요한 권한만 부여
 
-\- 서버 역할에 필요한 통신만 허용하도록 firewalld를 구성
+- 서버 역할에 필요한 통신만 허용하도록 firewalld를 구성
 
-\- mariadb-dump와 Bash 스크립트로 DB 백업 자동화
+- mariadb-dump와 Bash 스크립트로 DB 백업 자동화
 
-\- cron으로 매일 실행+7일 이상 지난 백업은 자동 삭제되도록 구성
+- cron으로 매일 실행+7일 이상 지난 백업은 자동 삭제되도록 구성
 
 
 
@@ -106,7 +105,7 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 ## 3. 트러블 슈팅
 
-**- 문제1: Private DB 패키지 설치 실패**
+- 문제1: Private DB 패키지 설치 실패
 
 원인: Private Subnet에 인터넷 경로가 없어 dnf timeout이 발생함
 
@@ -114,7 +113,7 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 
 
-**- 문제2: MariaDB Dump 인증 오류**
+- 문제2: MariaDB Dump 인증 오류
 
 원인: ec2-user로 dump 실행 시 DB 인증이 실패함
 
@@ -124,19 +123,19 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 ## 4. 운영 검증
 
-**- DB Backup / Restore**
+- DB Backup / Restore
 
 mariadb-dump로 생성한 백업 파일을 별도 테스트 DB에 Restore하고,
 
 products 테이블의 데이터와 건수가 동일하게 복구되는 것을 확인함
 
-**- Nginx Log Rotation**
+- Nginx Log Rotation
 
 logrotate를 강제로 실행해 access.log가 정상적으로 Rotation되는 것을 확인함
 
 이후 새 access.log에 HTTP 요청 로그가 정상적으로 기록되는 것을 검증함
 
-**- 서비스 자동 기동**
+- 서비스 자동 기동
 
 WEB / WAS / DB 서버 재부팅 후
 
