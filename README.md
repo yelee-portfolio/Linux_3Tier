@@ -11,6 +11,7 @@ Linux 기반의 WEB / WAS / DB 3-Tier 환경을 VMware환경에서 구성하고,
 또한 서비스 자동 기동, 접근 제어, DB 백업·복구와 로그 관리까지 운영 항목을 함께 검증했습니다.
 
 
+
 ## 1. VMware 구축
 
 **- WEB01 (192.168.10.10)**
@@ -20,6 +21,7 @@ Linux 기반의 WEB / WAS / DB 3-Tier 환경을 VMware환경에서 구성하고,
 80번 포트에서 Nginx가 요청을 받고 → WAS01 8080포트로 요청 전달하도록 구성함
 
 WEB01 주소 접속 시 WAS01에서 조회한 Inventory 화면이 출력되는 것으로 Reverse Proxy 동작을 확인함
+
 
 
 
