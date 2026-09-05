@@ -63,11 +63,11 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 ### 관련설정 경로
 
-Nginx 설정 : config/nginx/was.conf
+- Nginx 설정 : config/nginx/was.conf
 
-systemd 설정 : config/systemd/inventory.service
+- systemd 설정 : config/systemd/inventory.service
 
-DB 백업 스크립트 : scripts/db-backup.sh
+- DB 백업 스크립트 : scripts/db-backup.sh
 
 
 
@@ -106,7 +106,7 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 ## 3. 트러블 슈팅
 
-**문제1: Private DB 패키지 설치 실패**
+**- 문제1: Private DB 패키지 설치 실패**
 
 원인: Private Subnet에 인터넷 경로가 없어 dnf timeout이 발생함
 
@@ -114,7 +114,7 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 
 
-**문제2: MariaDB Dump 인증 오류**
+**- 문제2: MariaDB Dump 인증 오류**
 
 원인: ec2-user로 dump 실행 시 DB 인증이 실패함
 
@@ -124,19 +124,19 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 ## 4. 운영 검증
 
-**DB Backup / Restore**
+**- DB Backup / Restore**
 
 mariadb-dump로 생성한 백업 파일을 별도 테스트 DB에 Restore하고,
 
 products 테이블의 데이터와 건수가 동일하게 복구되는 것을 확인함
 
-**Nginx Log Rotation**
+**- Nginx Log Rotation**
 
 logrotate를 강제로 실행해 access.log가 정상적으로 Rotation되는 것을 확인함
 
 이후 새 access.log에 HTTP 요청 로그가 정상적으로 기록되는 것을 검증함
 
-**서비스 자동 기동**
+**- 서비스 자동 기동**
 
 WEB / WAS / DB 서버 재부팅 후
 
