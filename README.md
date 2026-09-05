@@ -126,18 +126,19 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 **DB Backup / Restore**
 
 mariadb-dump로 생성한 백업 파일을 별도 테스트 DB에 Restore하고,
+
 products 테이블의 데이터와 건수가 동일하게 복구되는 것을 확인함
 
 **Nginx Log Rotation**
 
-기존 logrotate 정책을 확인하고 강제 Rotation을 수행함
+logrotate를 강제로 실행해 access.log가 정상적으로 Rotation되는 것을 확인함
 
-기존 access.log가 분리되고 새로운 access.log가 생성된 뒤,
-새 HTTP 요청 로그가 정상적으로 기록되는 것을 확인함
+이후 새 access.log에 HTTP 요청 로그가 정상적으로 기록되는 것을 검증함
 
 **서비스 자동 기동**
 
 WEB / WAS / DB 서버 재부팅 후
+
 Nginx, Flask, MariaDB가 자동 실행되고 전체 서비스가 정상 동작하는 것을 확인함
 
 
