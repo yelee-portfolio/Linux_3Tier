@@ -1,4 +1,4 @@
-# Linux 3-Tier 인프라 구축
+# Linux 3-Tier 인프라 구축 및 운영
 
 
 
@@ -6,7 +6,7 @@
 
 Linux 기반의 WEB / WAS / DB 3-Tier 환경을 VMware환경에서 구성하고,
 이 구조를 AWS에서도 구성하였습니다.
-
+또한 서비스 자동 기동, 접근 제어, DB 백업·복구와 로그 관리까지 운영 항목을 함께 검증했습니다.
 
 
 ## 1. VMware 구축
@@ -51,7 +51,9 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 \- 서버 역할에 필요한 통신만 허용하도록 firewalld를 구성
 
-\- mariadb-dump와 Bash 스크립트로 DB 백업 자동화+cron으로 매일 실행+7일 이상 지난 백업은 자동 삭제되도록 구성
+\- mariadb-dump와 Bash 스크립트로 DB 백업 자동화
+
+\- cron으로 매일 실행+7일 이상 지난 백업은 자동 삭제되도록 구성
 
 
 
@@ -99,7 +101,7 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 
 
-### 트러블 슈팅
+## 3. 트러블 슈팅
 
 **문제1: Private DB 패키지 설치 실패**
 
@@ -117,12 +119,32 @@ WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
 
 
 
+## 4. 운영 검증
+
+**DB Backup / Restore**
+
+mariadb-dump로 생성한 백업 파일을 별도 테스트 DB에 Restore하고,
+products 테이블의 데이터와 건수가 동일하게 복구되는 것을 확인함
+
+**Nginx Log Rotation**
+
+기존 logrotate 정책을 확인하고 강제 Rotation을 수행함
+
+기존 access.log가 분리되고 새로운 access.log가 생성된 뒤,
+새 HTTP 요청 로그가 정상적으로 기록되는 것을 확인함
+
+**서비스 자동 기동**
+
+WEB / WAS / DB 서버 재부팅 후
+Nginx, Flask, MariaDB가 자동 실행되고 전체 서비스가 정상 동작하는 것을 확인함
+
+
+
 ## 결론
 
 VMware 환경에서 WEB → WAS → DB 통신 구성을 완료했습니다.
 
 이후 동일한 3-Tier 구조를 AWS로 옮기고, WEB은 Public Subnet, WAS / DB는 Private Subnet으로 분리했습니다.
 
-각 서비스는 systemd로 자동 기동하도록 구성 하였으며, DB 백업도 자동화했습니다.
-
-마지막으로 전체 서비스가 정상적으로 동작하는지 재부팅하여 확인했습니다.
+또한 서비스 자동 기동, DB 백업·복구와 Nginx Log Rotation을 검증하며
+기본적인 Linux 서버 운영 과정을 확인했습니다.
