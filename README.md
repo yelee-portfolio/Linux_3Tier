@@ -2,7 +2,7 @@
 
 
 
-## 0.목표
+## 0. 목표
 
 Linux 기반의 WEB / WAS / DB 3-Tier 환경을 VMware환경에서 구성하고,
 
