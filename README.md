@@ -73,17 +73,17 @@ mariadb-dump를 이용해 백업하며, cron 등록으로 매일 자동으로 �
 
 ## 2. AWS 구축
 
-**- WEB01 (10.0.1.10/Public Subnet)**
+- WEB01 (10.0.1.10/Public Subnet)
 
 WEB 서버는 Public 접근을 허용하고,
 HTTP 80 요청을 받아 WAS01의 8080 포트로 전달하도록 구성함
 
-**- WAS01 (10.0.2.20/Private Subnet)**
+- WAS01 (10.0.2.20/Private Subnet)
 
 WAS 서버는 Public IP 없이 Private Subnet에 배치하고,
 WEB01에서 전달된 요청을 처리한 뒤 DB01의 3306 포트로 MariaDB에 접속하도록 구성함
 
-**- DB01 (10.0.3.30/Private Subnet)**
+- DB01 (10.0.3.30/Private Subnet)
 
 DB 서버는 Public IP 없이 Private Subnet에 배치하고,
 WAS01에만 MySQL 3306 포트로 접속할 수 있게 설정함
