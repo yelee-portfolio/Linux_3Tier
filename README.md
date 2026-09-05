@@ -144,7 +144,7 @@ Nginx, Flask, MariaDB가 자동 실행되고 전체 서비스가 정상 동작�
 
 
 
-## 5.결론
+## 5. 결론
 
 VMware 환경에서 WEB → WAS → DB 통신 구성을 완료했습니다.
 
